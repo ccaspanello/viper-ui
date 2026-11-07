@@ -13,9 +13,10 @@
     "format:check": "oxfmt . --check",
     "lint": "pnpm -r lint",
     "lint:fix": "pnpm -r lint:fix",
+    "test": "pnpm -r test",
     "build": "pnpm -r build",
     "prepare": "husky",
-    "verify": "pnpm run format:check"
+    "verify": "pnpm format:check && pnpm lint && pnpm test && pnpm build"
   },
   "dependencies": {
     "oxfmt": "^0.77.0"

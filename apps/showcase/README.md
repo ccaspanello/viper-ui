@@ -1,5 +1,8 @@
 # React + TypeScript + Vite
 
+Run tests with `pnpm test`, use `pnpm test:watch` while developing, or run
+`pnpm test:coverage` to generate a coverage report.
+
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
 Currently, two official plugins are available:
