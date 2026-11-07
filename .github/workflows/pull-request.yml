@@ -1,0 +1,57 @@
+name: Pull request checks
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up workspace
+        uses: ./.github/actions/setup
+      - name: Run format
+        run: pnpm format:check
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up workspace
+        uses: ./.github/actions/setup
+      - name: Run lint
+        run: pnpm lint
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up workspace
+        uses: ./.github/actions/setup
+      - name: Run test
+        run: pnpm test
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up workspace
+        uses: ./.github/actions/setup
+      - name: Run build
+        run: pnpm build

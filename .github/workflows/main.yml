@@ -1,0 +1,85 @@
+name: Main checks and deployment
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: main-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up workspace
+        uses: ./.github/actions/setup
+      - name: Run format
+        run: pnpm format:check
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up workspace
+        uses: ./.github/actions/setup
+      - name: Run lint
+        run: pnpm lint
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up workspace
+        uses: ./.github/actions/setup
+      - name: Run test
+        run: pnpm test
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up workspace
+        uses: ./.github/actions/setup
+      - name: Run build
+        run: pnpm build
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: [format, lint, test, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up workspace
+        uses: ./.github/actions/setup
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Build showcase for GitHub Pages
+        run: pnpm --filter showcase build --base "/${{ github.event.repository.name }}/"
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/showcase/dist
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
