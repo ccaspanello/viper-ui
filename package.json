@@ -1,0 +1,22 @@
+{
+  "name": "viper-ui",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "main": "index.js",
+  "scripts": {
+    "format": "oxfmt .",
+    "format:check": "oxfmt . --check",
+    "prepare": "husky",
+    "verify": "pnpm run format:check"
+  },
+  "dependencies": {
+    "oxfmt": "^0.77.0"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
+  },
+  "packageManager": "pnpm@10.33.0"
+}
